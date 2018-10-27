@@ -215,7 +215,6 @@ public class TacticsMove : MonoBehaviour
 	{
 		ClearTilesList(selectableTiles);
 		IsMoving = false;
-		Debug.Log(nbOfTilesCrossed);
 		CombatStats.RemoveMovementPoints(nbOfTilesCrossed - 1); //bug for some reason it adds +1 once
 		nbOfTilesCrossed = 0;
 	}

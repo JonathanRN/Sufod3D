@@ -38,7 +38,7 @@ public class Npc : TacticsMove
 	protected override void OnFinishedMoving()
 	{
 		base.OnFinishedMoving();
-		if (CombatStats.IsOutOfMovementPoints)
+		//if (CombatStats.IsOutOfMovementPoints)
 			TurnManager.EndTurn();
 	}
 
