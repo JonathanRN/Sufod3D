@@ -44,11 +44,28 @@ public class Player : TacticsMove
 
 	//todo rename that bitch
 	private bool WantToAttack()
-	{	
+	{
 		if (Input.GetKeyDown(KeyCode.Alpha1))
+		{
+			if (currentAbility == abilities.ElementAt(0))
+			{
+				IsAttacking = false;
+				currentAbility = null;
+				return false;
+			}
 			currentAbility = abilities.ElementAt(0);
+		}
+
 		if (Input.GetKeyDown(KeyCode.Alpha2))
-			currentAbility = currentAbility = abilities.ElementAt(1);
+		{
+			if (currentAbility == abilities.ElementAt(1))
+			{
+				IsAttacking = false;
+				currentAbility = null;
+				return false;
+			}
+			currentAbility = abilities.ElementAt(1);
+		}
 
 		return currentAbility != null && CombatStats.CanUseAbility(currentAbility);
 	}
