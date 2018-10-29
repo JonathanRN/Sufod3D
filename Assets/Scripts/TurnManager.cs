@@ -65,6 +65,10 @@ public class TurnManager : MonoBehaviour
 
 		list.Add(unit);
 	}
-	
+
 	//TODO remove units when they die
+	public void RemoveUnit(TacticsMove unit)
+	{
+		
+	}
 }

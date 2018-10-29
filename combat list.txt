@@ -1,0 +1,10 @@
+Ui voir attaques
+Attaques de zone
+plusieurs joueurs
+ennemis attaquent les joueurs
+UI montre liste des turns
+Prevision de dommage quand hover
+*Plusieurs stats qui affect spells
+Rewards
+
+*we dont know yet

@@ -10,6 +10,7 @@
         <e p="Scripts" t="Include">
           <e p="CombatStats.cs" t="Include" />
           <e p="Grid.cs" t="Include" />
+          <e p="Health.cs" t="Include" />
           <e p="MenuScript.cs" t="Include" />
           <e p="Npc.cs" t="Include" />
           <e p="NpcPathfinding.cs" t="Include" />
@@ -19,6 +20,13 @@
           <e p="TacticsMove.cs" t="Include" />
           <e p="Tile.cs" t="Include" />
           <e p="TurnManager.cs" t="Include" />
+          <e p="WeSoLit" t="Include">
+            <e p="Ability.cs" t="Include" />
+            <e p="Perso1" t="Include">
+              <e p="Fireball.cs" t="Include" />
+              <e p="Slash.cs" t="Include" />
+            </e>
+          </e>
         </e>
       </e>
       <e p="GPA_TacticsMovement.sln" t="IncludeFlat" />

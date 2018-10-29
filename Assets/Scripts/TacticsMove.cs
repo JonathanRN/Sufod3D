@@ -13,7 +13,8 @@ public class TacticsMove : MonoBehaviour
 
 	protected TurnManager TurnManager;
 	protected CombatStats CombatStats;
-	protected List<Ability> abilities;
+	protected List<Ability> Abilities;
+	protected Health health;
 
 	private readonly List<Tile> selectableTiles = new List<Tile>();
 	private readonly List<Tile> attackableTiles = new List<Tile>();
@@ -64,15 +65,24 @@ public class TacticsMove : MonoBehaviour
 	{
 		TurnManager = GameObject.FindWithTag("GameController").GetComponent<TurnManager>();
 		CombatStats = GetComponentInChildren<CombatStats>();
+		health = GetComponentInChildren<Health>();
 	}
 
 	protected void Init()
 	{
 		tiles = GameObject.FindWithTag("Grid").GetComponent<Grid>().Tiles;
-		abilities = new List<Ability>();
+		Abilities = new List<Ability>();
 		halfHeight = GetComponent<Collider>().bounds.extents.y;
 		TurnManager.AddUnit(this);
 		InitPerso1Abilities();
+	}
+
+	protected virtual void Update()
+	{
+		/*if (health.IsDead)
+		{
+			
+		}*/
 	}
 
 	public void GetCurrentTile()
@@ -228,7 +238,7 @@ public class TacticsMove : MonoBehaviour
 		nbOfTilesCrossed = 0;
 	}
 
-	protected void AttackTile(Tile tile,Ability ability)
+	protected void AttackTile(Tile tile, Ability ability)
 	{
 		CombatStats.RemoveActionPoints(ability.ApCost);
 		
@@ -236,15 +246,19 @@ public class TacticsMove : MonoBehaviour
 		IsAttacking = false;
 		Debug.Log("Attacked tile: " + tile);
 
-		CheckObjectAttackedOnTile(tile);
+		CheckObjectAttackedOnTile(tile, ability);
 	}
 
-	private void CheckObjectAttackedOnTile(Tile tile)
+	private void CheckObjectAttackedOnTile(Tile tile, Ability ability)
 	{
 		RaycastHit hit;
 
-		if (Physics.Raycast(tile.transform.position, Vector3.up, out hit, 1))
+		if (tile.IsObjectOnTopOfTile(out hit))
+		{
 			Debug.Log("You hit: " + hit.collider.gameObject);
+			hit.collider.GetComponentInChildren<Health>().Hit(ability.Damage);	
+			Debug.Log(hit.collider.GetComponentInChildren<Health>().HealthPoints);
+		}
 		else
 			Debug.Log("You hit nothing...");
 	}
@@ -265,8 +279,8 @@ public class TacticsMove : MonoBehaviour
 
 	private void InitPerso1Abilities()
 	{
-		abilities.Add(new Fireball());
-		abilities.Add(new Slash());
+		Abilities.Add(new Fireball());
+		Abilities.Add(new Slash());
 	}
 
 	public void CalculateHeading(Vector3 target)
@@ -290,5 +304,4 @@ public class TacticsMove : MonoBehaviour
 	{
 		IsItsTurn = false;
 	}
-	
 }

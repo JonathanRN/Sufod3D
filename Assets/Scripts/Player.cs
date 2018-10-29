@@ -46,9 +46,9 @@ public class Player : TacticsMove
 	private bool WantToAttack()
 	{	
 		if (Input.GetKeyDown(KeyCode.Alpha1))
-			currentAbility = abilities.ElementAt(0);
+			currentAbility = Abilities.ElementAt(0);
 		if (Input.GetKeyDown(KeyCode.Alpha2))
-			currentAbility = currentAbility = abilities.ElementAt(1);
+			currentAbility = currentAbility = Abilities.ElementAt(1);
 
 		return currentAbility != null && CombatStats.CanUseAbility(currentAbility);
 	}
@@ -99,6 +99,7 @@ public class Player : TacticsMove
 			RaycastHit hit;
 
 			if (Physics.Raycast(ray, out hit))
+			{
 				if (hit.collider.CompareTag("Tile"))
 				{
 					var t = hit.collider.GetComponent<Tile>();
@@ -109,6 +110,7 @@ public class Player : TacticsMove
 						currentAbility = null;
 					}
 				}
+			}
 		}
 	}
 }

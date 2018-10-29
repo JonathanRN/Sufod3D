@@ -5,10 +5,15 @@
 		private int range = 3;
 		private int apCost = 3;
 		private bool isAffectedByPlayerRange = true;
-	
+		private int damage = 6;
+
 		public override int Range
 		{
 			get { return range; }
+		}
+		public override int Damage
+		{
+			get { return damage; }
 		}
 		public override int ApCost
 		{

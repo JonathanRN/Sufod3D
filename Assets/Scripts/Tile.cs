@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -94,7 +95,7 @@ public class Tile : MonoBehaviour
 			{
 				RaycastHit hit;
 
-				if (!Physics.Raycast(tile.transform.position, Vector3.up, out hit, 1) || tile == target)
+				if (!tile.IsObjectOnTopOfTile(out hit) || tile == target)
 					AdjacencyList.Add(tile);
 			}
 		}
@@ -111,5 +112,10 @@ public class Tile : MonoBehaviour
 			if (tile != null)
 				AdjacencyList.Add(tile);
 		}
+	}
+
+	public bool IsObjectOnTopOfTile(out RaycastHit hit)
+	{
+		return Physics.Raycast(transform.position, Vector3.up, out hit, 1);
 	}
 }
