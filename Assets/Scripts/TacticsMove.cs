@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using WeSoLit.Perso1;
 
 public class TacticsMove : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class TacticsMove : MonoBehaviour
 
 	protected TurnManager TurnManager;
 	protected CombatStats CombatStats;
+	protected List<Ability> abilities;
 
 	private readonly List<Tile> selectableTiles = new List<Tile>();
 	private readonly List<Tile> attackableTiles = new List<Tile>();
@@ -65,9 +67,11 @@ public class TacticsMove : MonoBehaviour
 
 	protected void Init()
 	{
+		abilities = new List<Ability>();
 		tiles = GameObject.FindGameObjectsWithTag("Tile");
 		halfHeight = GetComponent<Collider>().bounds.extents.y;
 		TurnManager.AddUnit(this);
+		InitPerso1Abilities();
 	}
 
 	public void GetCurrentTile()
@@ -134,7 +138,7 @@ public class TacticsMove : MonoBehaviour
 		}
 	}
 
-	public void FindAttackableTiles()
+	public void FindAttackableTiles(Ability ability)
 	{
 		ComputeAttackableAdjacencyLists(null);
 		GetCurrentTile();
@@ -151,7 +155,11 @@ public class TacticsMove : MonoBehaviour
 			attackableTiles.Add(t);
 			t.Attackable = true;
 
-			if (t.Distance < CombatStats.AttackRange)
+			var currentAttackRange = ability.IsAffectedByPlayerRange
+				? ability.Range + CombatStats.AttackRange
+				: ability.Range;
+				
+			if (t.Distance < currentAttackRange)
 				foreach (var tile in t.AdjacencyList)
 					if (!tile.Visited)
 					{
@@ -219,8 +227,10 @@ public class TacticsMove : MonoBehaviour
 		nbOfTilesCrossed = 0;
 	}
 
-	protected void AttackTile(Tile tile)
+	protected void AttackTile(Tile tile,Ability ability)
 	{
+		CombatStats.RemoveActionPoints(ability.ApCost);
+		
 		ClearTilesList(attackableTiles);
 		IsAttacking = false;
 		Debug.Log("Attacked tile: " + tile);
@@ -252,6 +262,12 @@ public class TacticsMove : MonoBehaviour
 		list.Clear();
 	}
 
+	private void InitPerso1Abilities()
+	{
+		abilities.Add(new Fireball());
+		abilities.Add(new Slash());
+	}
+
 	public void CalculateHeading(Vector3 target)
 	{
 		heading = target - transform.position;
@@ -273,4 +289,5 @@ public class TacticsMove : MonoBehaviour
 	{
 		IsItsTurn = false;
 	}
+	
 }

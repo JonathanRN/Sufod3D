@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using Boo.Lang;
+using UnityEngine;
 
 public class Player : TacticsMove
 {
 	private bool shouldMoveThisFrame;
+	private Ability currentAbility;
 	
 	private void Start()
 	{
@@ -19,7 +22,7 @@ public class Player : TacticsMove
 		
 		if (IsMoving == false)
 		{
-			if (!Input.GetKeyDown(KeyCode.Alpha1) && !IsAttacking)
+			if (!WantToAttack() && !IsAttacking)
 			{
 				FindSelectableTiles();
 				MoveToTileOnMouseClick();
@@ -27,7 +30,7 @@ public class Player : TacticsMove
 			else
 			{
 				IsAttacking = true;
-				FindAttackableTiles();
+				FindAttackableTiles(currentAbility);
 				AttackTileUnderMouse();
 			}
 			
@@ -39,10 +42,24 @@ public class Player : TacticsMove
 		}
 	}
 
+	//todo rename that bitch
+	private bool WantToAttack()
+	{	
+		if (Input.GetKeyDown(KeyCode.Alpha1))
+			currentAbility = abilities.ElementAt(0);
+		if (Input.GetKeyDown(KeyCode.Alpha2))
+			currentAbility = currentAbility = abilities.ElementAt(1);
+
+		return currentAbility != null && CombatStats.CanUseAbility(currentAbility);
+	}
+
 	private void EndTurnOnInput(bool input)
 	{
 		if (input)
+		{
+			currentAbility = null;
 			TurnManager.EndTurn();
+		}
 	}
 
 	// For Physics Updates
@@ -87,7 +104,10 @@ public class Player : TacticsMove
 					var t = hit.collider.GetComponent<Tile>();
 
 					if (t.Attackable)
-						AttackTile(t);
+					{
+						AttackTile(t, currentAbility);
+						currentAbility = null;
+					}
 				}
 		}
 	}
