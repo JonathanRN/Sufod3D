@@ -9,11 +9,12 @@
       <e p="Assets" t="Include">
         <e p="Scripts" t="Include">
           <e p="CombatStats.cs" t="Include" />
-          <e p="MeleeAttack.cs" t="Include" />
+          <e p="Grid.cs" t="Include" />
           <e p="MenuScript.cs" t="Include" />
           <e p="Npc.cs" t="Include" />
           <e p="NpcPathfinding.cs" t="Include" />
           <e p="Player.cs" t="Include" />
+          <e p="RockMaker.cs" t="Include" />
           <e p="TacticsCamera.cs" t="Include" />
           <e p="TacticsMove.cs" t="Include" />
           <e p="Tile.cs" t="Include" />

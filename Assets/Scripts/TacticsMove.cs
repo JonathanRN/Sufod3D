@@ -15,9 +15,10 @@ public class TacticsMove : MonoBehaviour
 
 	private readonly List<Tile> selectableTiles = new List<Tile>();
 	private readonly List<Tile> attackableTiles = new List<Tile>();
-	private GameObject[] tiles;
 
 	private readonly Stack<Tile> path = new Stack<Tile>();
+
+	private GameObject[] tiles;
 	
 	private Vector3 velocity;
 	private Vector3 heading;
@@ -59,13 +60,13 @@ public class TacticsMove : MonoBehaviour
 	
 	protected virtual void Awake()
 	{
+		tiles = GameObject.FindWithTag("Grid").GetComponent<Grid>().Tiles;
 		TurnManager = GameObject.FindWithTag("GameController").GetComponent<TurnManager>();
 		CombatStats = GetComponentInChildren<CombatStats>();
 	}
 
 	protected void Init()
 	{
-		tiles = GameObject.FindGameObjectsWithTag("Tile");
 		halfHeight = GetComponent<Collider>().bounds.extents.y;
 		TurnManager.AddUnit(this);
 	}

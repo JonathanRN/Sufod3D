@@ -29,7 +29,6 @@ public class Npc : TacticsMove
 			CalculatePath();
 			FindSelectableTiles();
 			npcPathfinding.ActualTargetTile.Target = true;
-			
 		}
 		else
 			Move();
