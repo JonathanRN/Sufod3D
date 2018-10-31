@@ -12,7 +12,10 @@ public class Grid : MonoBehaviour
 		GenerateGrid();
 		Tiles = GameObject.FindGameObjectsWithTag("Tile");
 	}
-
+	
+	/// <summary>
+	/// O2(n^2) ?
+	/// </summary>
 	private void GenerateGrid()
 	{
 		//First half
