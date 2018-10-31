@@ -99,6 +99,22 @@ public class Player : TacticsMove
 		}
 	}
 
+	private void FindAOETile()
+	{
+		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+		RaycastHit hit;
+
+		if (Physics.Raycast(ray, out hit))
+			if (hit.collider.CompareTag("Tile"))
+			{
+				var t = hit.collider.GetComponent<Tile>();
+
+				//if (t.Attackable)
+					
+			}
+	}
+
 	private void AttackTileUnderMouse()
 	{
 		if (!Input.GetMouseButtonUp(0))

@@ -76,10 +76,10 @@ public class Tile : MonoBehaviour
 	{
 		Reset();
 
-		CheckAttackableTile(Vector3.forward, target);
-		CheckAttackableTile(-Vector3.forward, target);
-		CheckAttackableTile(Vector3.right, target);
-		CheckAttackableTile(-Vector3.right, target);
+		CheckAttackableTile(Vector3.forward);
+		CheckAttackableTile(-Vector3.forward);
+		CheckAttackableTile(Vector3.right);
+		CheckAttackableTile(-Vector3.right);
 	}
 
 	public void CheckWalkableTile(Vector3 direction, Tile target)
@@ -101,7 +101,7 @@ public class Tile : MonoBehaviour
 		}
 	}
 
-	public void CheckAttackableTile(Vector3 direction, Tile target)
+	public void CheckAttackableTile(Vector3 direction)
 	{
 		var halfExtents = new Vector3(0.25f, 0.25f, 0.25f);
 		var colliders = Physics.OverlapBox(transform.position + direction, halfExtents);
