@@ -5,6 +5,9 @@ public class CombatStats : MonoBehaviour
 	[SerializeField] private int movementPoints = 5;
 	[SerializeField] private int actionPoints = 6;
 	[SerializeField] private int attackRange = 2;
+	
+	// todo maybe make an object which contains all stats?
+	[SerializeField] private int speed = 2;
 
 	public int MovementPoints
 	{
@@ -22,6 +25,12 @@ public class CombatStats : MonoBehaviour
 	{
 		get { return attackRange; }
 		private set { attackRange = value; }
+	}
+
+	public int Speed
+	{
+		get { return speed; }
+		private set { speed = value; }
 	}
 	
 	public bool IsOutOfMovementPoints

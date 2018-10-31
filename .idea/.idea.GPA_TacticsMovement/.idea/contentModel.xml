@@ -20,6 +20,7 @@
           <e p="TacticsMove.cs" t="Include" />
           <e p="Tile.cs" t="Include" />
           <e p="TurnManager.cs" t="Include" />
+          <e p="TurnManagerTeam.cs" t="Include" />
           <e p="WeSoLit" t="Include">
             <e p="Ability.cs" t="Include" />
             <e p="Perso1" t="Include">

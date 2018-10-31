@@ -10,7 +10,6 @@ public class RockMaker : MonoBehaviour
 	private void Start()
 	{
 		tiles = GameObject.FindWithTag("Grid").GetComponent<Grid>().Tiles;
-		Debug.Log(tiles);
 		
 		RandomlyGenerateRocks();
 	}

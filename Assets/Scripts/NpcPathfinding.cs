@@ -5,14 +5,14 @@ public class NpcPathfinding : MonoBehaviour
 {
 	private TacticsMove tacticsMove;
 	private CombatStats combatStats;
-	private TurnManager turnManager;
+	private TurnManagerTeam turnManagerTeam;
 	
 	public Tile ActualTargetTile { get; set; }
 
 	private void Awake()
 	{
 		tacticsMove = GetComponentInParent<TacticsMove>();
-		turnManager = GameObject.FindWithTag("GameController").GetComponent<TurnManager>();
+		turnManagerTeam = GameObject.FindWithTag("GameController").GetComponent<TurnManagerTeam>();
 		combatStats = GetComponent<CombatStats>();
 	}
 
@@ -61,7 +61,6 @@ public class NpcPathfinding : MonoBehaviour
 		var closedList = new List<Tile>();
 
 		openList.Add(tacticsMove.CurrentTile);
-		//currentTile.parent = ??
 		tacticsMove.CurrentTile.H = Vector3.Distance(tacticsMove.CurrentTile.transform.position, target.transform.position);
 		tacticsMove.CurrentTile.F = tacticsMove.CurrentTile.H;
 
@@ -110,7 +109,7 @@ public class NpcPathfinding : MonoBehaviour
 		//todo - what do you do if there is no path to the target tile?
 		Debug.Log("Path not found");
 		//End turn for now
-		turnManager.EndTurn();
+		turnManagerTeam.EndTurn();
 	}
 	
 	public GameObject FindNearestTarget()

@@ -70,19 +70,21 @@ public class TacticsMove : MonoBehaviour
 
 	protected void Init()
 	{
+		IsItsTurn = false;
 		tiles = GameObject.FindWithTag("Grid").GetComponent<Grid>().Tiles;
 		Abilities = new List<Ability>();
 		halfHeight = GetComponent<Collider>().bounds.extents.y;
-		TurnManager.AddUnit(this);
+		TurnManager.AddUnit(gameObject);
 		InitPerso1Abilities();
 	}
 
 	protected virtual void Update()
 	{
-		/*if (health.IsDead)
+		if (health.IsDead)
 		{
-			
-		}*/
+			TurnManager.RemoveUnit(gameObject);
+			Destroy(gameObject);
+		}
 	}
 
 	public void GetCurrentTile()
@@ -296,6 +298,7 @@ public class TacticsMove : MonoBehaviour
 
 	public void BeginTurn()
 	{
+		//enabled = true;
 		IsItsTurn = true;
 		CombatStats.Reset();
 	}
@@ -303,5 +306,6 @@ public class TacticsMove : MonoBehaviour
 	public void EndTurn()
 	{
 		IsItsTurn = false;
+		//enabled = false;
 	}
 }

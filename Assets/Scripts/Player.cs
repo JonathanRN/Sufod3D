@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Player : TacticsMove
 {
-	private bool shouldMoveThisFrame;
 	private Ability currentAbility;
 	
 	private void Start()
@@ -12,14 +11,15 @@ public class Player : TacticsMove
 		Init();
 	}
 
-	private void Update()
+	protected override void Update()
 	{
-		Debug.DrawRay(transform.position, transform.forward);
-		shouldMoveThisFrame = false;
-
-		if (!IsItsTurn)
-			return;
+		base.Update();
 		
+		Debug.DrawRay(transform.position, transform.forward);
+
+		if (!IsItsTurn) //bug if two player are side by side in the queue, the input gets called for both
+			return;
+
 		if (IsMoving == false)
 		{
 			if (!WantToAttack() && !IsAttacking)
@@ -33,12 +33,12 @@ public class Player : TacticsMove
 				FindAttackableTiles(currentAbility);
 				AttackTileUnderMouse();
 			}
-			
-			EndTurnOnInput(Input.GetKeyUp(KeyCode.Space));
+
+			EndTurnOnInput(Input.GetKeyDown(KeyCode.Space));
 		}
 		else
 		{
-			shouldMoveThisFrame = true;
+			Move();
 		}
 	}
 
@@ -76,15 +76,7 @@ public class Player : TacticsMove
 		{
 			currentAbility = null;
 			TurnManager.EndTurn();
-		}
-	}
-
-	// For Physics Updates
-	private void FixedUpdate()
-	{
-		if (shouldMoveThisFrame)
-		{
-			Move();
+			Debug.Log("End turn");
 		}
 	}
 
@@ -109,22 +101,33 @@ public class Player : TacticsMove
 
 	private void AttackTileUnderMouse()
 	{
-		if (Input.GetMouseButtonUp(0))
+		if (!Input.GetMouseButtonUp(0))
+			return;
+
+		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+		RaycastHit hit;
+
+		if (Physics.Raycast(ray, out hit))
 		{
-			var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-			RaycastHit hit;
-
-			if (Physics.Raycast(ray, out hit))
+			if (hit.collider.CompareTag("NPC"))
 			{
-				if (hit.collider.CompareTag("Tile"))
-				{
-					var t = hit.collider.GetComponent<Tile>();
+				RaycastHit npcHit;
 
-					if (t.Attackable)
+				// Check the tile under the unit to attack it
+				if (Physics.Raycast(hit.collider.transform.position, -Vector3.up, out npcHit))
+				{
+					if (npcHit.collider.CompareTag("Tile"))
 					{
-						AttackTile(t, currentAbility);
-						currentAbility = null;
+						var tileUnder = npcHit.collider.GetComponent<Tile>();
+
+						if (tileUnder.Attackable)
+						{
+							AttackTile(tileUnder, currentAbility);
+							currentAbility = null;
+						}
+						else
+							Debug.Log("Target too far away!");
 					}
 				}
 			}

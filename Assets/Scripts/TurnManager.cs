@@ -1,74 +1,57 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
-	private static readonly Dictionary<string, List<TacticsMove>> units = new Dictionary<string, List<TacticsMove>>();
-	private static readonly Queue<string> turnKey = new Queue<string>();
-	private static readonly Queue<TacticsMove> turnTeam = new Queue<TacticsMove>();
-	
+	private readonly List<GameObject> units = new List<GameObject>();
+	private Queue<GameObject> turnUnit;
+
+	private bool firstTurn = true;
+
 	private void Update()
 	{
-		if (turnTeam.Count == 0)
-			InitTeamTurnQueue();
-	}
-
-	private void InitTeamTurnQueue()
-	{
-		var teamList = units[turnKey.Peek()];
-
-		foreach (var unit in teamList)
-			turnTeam.Enqueue(unit);
-
-		StartTurn();
+		if (turnUnit.Count > 0 && firstTurn)
+		{
+			StartTurn();
+			firstTurn = false;
+		}
 	}
 
 	private void StartTurn()
 	{
-		if (turnTeam.Count > 0)
-			turnTeam.Peek().BeginTurn();
+		if (turnUnit.Count > 0)
+			turnUnit.Peek().GetComponent<TacticsMove>().BeginTurn();
 	}
 
 	public void EndTurn()
 	{
-		var unit = turnTeam.Dequeue();
-		unit.EndTurn();
+		var unit = turnUnit.Dequeue();
+		unit.GetComponent<TacticsMove>().EndTurn();
 
-		if (turnTeam.Count > 0)
-		{
-			StartTurn();
-		}
-		else
-		{
-			var team = turnKey.Dequeue();
-			turnKey.Enqueue(team);
-			InitTeamTurnQueue();
-		}
-	}
-
-	public void AddUnit(TacticsMove unit)
-	{
-		List<TacticsMove> list;
-
-		if (!units.ContainsKey(unit.tag))
-		{
-			list = new List<TacticsMove>();
-			units[unit.tag] = list;
-
-			if (!turnKey.Contains(unit.tag))
-				turnKey.Enqueue(unit.tag);
-		}
-		else
-		{
-			list = units[unit.tag];
-		}
-
-		list.Add(unit);
-	}
-
-	//TODO remove units when they die
-	public void RemoveUnit(TacticsMove unit)
-	{
+		turnUnit.Enqueue(unit);
 		
+		StartTurn();
+	}
+	
+	public void AddUnit(GameObject unit)
+	{
+		units.Add(unit);
+		SortList();
+	}
+
+	public void RemoveUnit(GameObject unit)
+	{
+		if (units.Contains(unit))
+		{
+			units.Remove(unit);
+			SortList();
+		}
+	}
+
+	private void SortList()
+	{
+		units.Sort((x, y) => y.GetComponentInChildren<CombatStats>().Speed.CompareTo(x.GetComponentInChildren<CombatStats>().Speed));
+		turnUnit = new Queue<GameObject>(units);
 	}
 }
