@@ -2,26 +2,18 @@
 {
 	public class Fireball : Ability
 	{
-		private int range = 3;
-		private int apCost = 3;
-		private bool isAffectedByPlayerRange = true;
-		private int damage = 6;
+		public override string Name { get; } = "Fireball";
+		
+		public override int Range { get; } = 3;
 
-		public override int Range
-		{
-			get { return range; }
-		}
-		public override int Damage
-		{
-			get { return damage; }
-		}
-		public override int ApCost
-		{
-			get { return apCost; }
-		}
-		public override bool IsAffectedByPlayerRange
-		{
-			get { return isAffectedByPlayerRange; }
-		}
+		public override int AOE { get; } = 2;
+
+		public override int Damage { get; } = 3;
+
+		public override int ApCost { get; } = 3;
+
+		public override int Priority { get; } = 1;
+		
+		public override bool IsAffectedByPlayerRange { get; } = true;
 	}
 }

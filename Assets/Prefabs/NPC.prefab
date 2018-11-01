@@ -168,6 +168,7 @@ MonoBehaviour:
   movementPoints: 5
   actionPoints: 6
   attackRange: 2
+  speed: 1
 --- !u!136 &136234878475356470
 CapsuleCollider:
   m_ObjectHideFlags: 1

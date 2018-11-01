@@ -9,16 +9,24 @@
           <e p="CombatStats.cs" t="Include" />
           <e p="Grid.cs" t="Include" />
           <e p="Health.cs" t="Include" />
-          <e p="MenuScript.cs" t="Include" />
           <e p="Npc.cs" t="Include" />
           <e p="NpcPathfinding.cs" t="Include" />
           <e p="Player.cs" t="Include" />
+          <e p="Queue.cs" t="Include" />
           <e p="RockMaker.cs" t="Include" />
           <e p="TacticsCamera.cs" t="Include" />
           <e p="TacticsMove.cs" t="Include" />
           <e p="Tile.cs" t="Include" />
           <e p="TurnManager.cs" t="Include" />
           <e p="TurnManagerTeam.cs" t="Include" />
+          <e p="Ui" t="Include">
+            <e p="AbilityPointsProgressBar.cs" t="Include" />
+            <e p="DamagePreview.cs" t="Include" />
+            <e p="DamagePreviewCreator.cs" t="Include" />
+            <e p="MenuScript.cs" t="Include" />
+            <e p="RadialProgressBar.cs" t="Include" />
+            <e p="TurnQueue.cs" t="Include" />
+          </e>
           <e p="WeSoLit" t="Include">
             <e p="Ability.cs" t="Include" />
             <e p="Perso1" t="Include">
