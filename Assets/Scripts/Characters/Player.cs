@@ -45,7 +45,7 @@ public class Player : TacticsMove
 				IsAttacking = true;
 				FindAttackableTiles(currentAbility);
 				PreviewAOETiles();
-				AttackAOEUnderMouse();
+				//AttackAOEUnderMouse();
 			}
 
 			EndTurnOnInput(Input.GetKeyDown(KeyCode.Space));
@@ -119,14 +119,54 @@ public class Player : TacticsMove
 		RaycastHit hit;
 
 		if (Physics.Raycast(ray, out hit))
+		{
 			if (hit.collider.CompareTag("Tile"))
 			{
 				var t = hit.collider.GetComponent<Tile>();
 
 				if (t.Attackable)
-					FindAOETiles(currentAbility,t);
-					
+				{
+					FindAOETiles(currentAbility, t);
+
+					if (Input.GetMouseButtonUp(0))
+					{
+						AttackAOETile(currentAbility);
+						currentAbility = null;
+						damagePreviewCreator.DestroyIfExists();
+					}
+				}
+
 			}
+
+			if (hit.collider.CompareTag("NPC"))
+			{
+				RaycastHit npcHit;
+				// Check the tile under the unit to attack it
+				if (Physics.Raycast(hit.collider.transform.position, -Vector3.up, out npcHit))
+				{
+					if (npcHit.collider.CompareTag("Tile"))
+					{
+						var tileUnder = npcHit.collider.GetComponent<Tile>();
+
+						if (tileUnder.Attackable)
+						{
+							CreateAndConfigureDamagePreview(hit.collider.gameObject);
+							FindAOETiles(currentAbility, tileUnder);
+							if (Input.GetMouseButtonUp(0))
+							{
+								AttackAOETile(currentAbility);
+								currentAbility = null;
+								damagePreviewCreator.DestroyIfExists();
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				damagePreviewCreator.DestroyIfExists();
+			}
+		}
 	}
 
 	private void AttackTileUnderMouse()
@@ -165,32 +205,6 @@ public class Player : TacticsMove
 		{
 			damagePreviewCreator.DestroyIfExists();
 		}
-	}
-	private void AttackAOEUnderMouse()
-	{
-		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-			RaycastHit npcHit;
-			// Check the tile under the unit to attack it
-			if (Physics.Raycast(ray, out npcHit))
-			{
-				if (npcHit.collider.CompareTag("Tile"))
-				{
-					var tileUnder = npcHit.collider.GetComponent<Tile>();
-
-					if (tileUnder.AOETouched)
-					{
-						if (Input.GetMouseButtonUp(0))
-						{
-							AttackAOETile(currentAbility);
-							currentAbility = null;
-							damagePreviewCreator.DestroyIfExists();
-						}
-					}
-				}
-			}
-		
-
 	}
 
 	private void CreateAndConfigureDamagePreview(GameObject target)

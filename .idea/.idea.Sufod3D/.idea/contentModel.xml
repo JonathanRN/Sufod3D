@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\Utilisateur\.Rider2018.1\system\resharper-host\Local\Transient\ReSharperHost\v12\SolutionCaches\_Sufod3D.863182992.00" t="ExcludeRecursive" />
-    <e p="C:\Users\Utilisateur\Desktop\Programmation\Sufod3D" t="IncludeRecursive">
+    <e p="C:\Users\Kevin\.Rider2018.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Kevin\.Rider2018.2\system\resharper-host\Local\Transient\ReSharperHost\v182\SolutionCaches\_Sufod3D.-497880915.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Kevin\Documents\UnityProjects\Sufod3D" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Scripts" t="Include">
-          <e p="CombatStats.cs" t="Include" />
+          <e p="Characters" t="Include">
+            <e p="CombatStats.cs" t="Include" />
+            <e p="Enemy" t="Include">
+              <e p="Npc.cs" t="Include" />
+              <e p="NpcPathfinding.cs" t="Include" />
+            </e>
+            <e p="Health.cs" t="Include" />
+            <e p="Player.cs" t="Include" />
+            <e p="TacticsMove.cs" t="Include" />
+          </e>
           <e p="Grid.cs" t="Include" />
-          <e p="Health.cs" t="Include" />
-          <e p="Npc.cs" t="Include" />
-          <e p="NpcPathfinding.cs" t="Include" />
-          <e p="Player.cs" t="Include" />
-          <e p="Queue.cs" t="Include" />
           <e p="RockMaker.cs" t="Include" />
           <e p="TacticsCamera.cs" t="Include" />
-          <e p="TacticsMove.cs" t="Include" />
           <e p="Tile.cs" t="Include" />
           <e p="TurnManager.cs" t="Include" />
           <e p="TurnManagerTeam.cs" t="Include" />
@@ -24,6 +28,8 @@
             <e p="DamagePreview.cs" t="Include" />
             <e p="DamagePreviewCreator.cs" t="Include" />
             <e p="MenuScript.cs" t="Include" />
+            <e p="MovementPointsProgressBar.cs" t="Include" />
+            <e p="Queue.cs" t="Include" />
             <e p="RadialProgressBar.cs" t="Include" />
             <e p="TurnQueue.cs" t="Include" />
           </e>
