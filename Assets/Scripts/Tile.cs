@@ -9,8 +9,10 @@ public class Tile : MonoBehaviour
 	public bool Target { private get; set; }
 	public bool Selectable { get; set; }
 	public bool Attackable { get; set; }
+	public bool AOETouched { get; set; }
 
 	public List<Tile> AdjacencyList = new List<Tile>();
+	public List<Tile> AOEAdjencyList = new List<Tile>();
 
 	//Needed BFS (breadth first search)
 	public bool Visited { get; set; }
@@ -37,6 +39,8 @@ public class Tile : MonoBehaviour
 			ChangeMaterialColor(Color.red);
 		else if (Attackable)
 			ChangeMaterialColor(Color.yellow);
+		else if (AOETouched)
+			ChangeMaterialColor(Color.blue);
 		else
 			ChangeMaterialColor(Color.white);
 	}
@@ -54,6 +58,23 @@ public class Tile : MonoBehaviour
 		Target = false;
 		Selectable = false;
 		Attackable = false;
+		AOETouched = false;
+
+		Visited = false;
+		Parent = null;
+		Distance = 0;
+
+		F = G = H = 0;
+	}
+
+	public void ResetAOE()
+	{
+		AOEAdjencyList.Clear();
+		
+		Current = false;
+		Target = false;
+		Selectable = false;		
+		AOETouched = false;
 
 		Visited = false;
 		Parent = null;
@@ -80,6 +101,16 @@ public class Tile : MonoBehaviour
 		CheckAttackableTile(-Vector3.forward);
 		CheckAttackableTile(Vector3.right);
 		CheckAttackableTile(-Vector3.right);
+	}
+	
+	public void FindNeighborsAOETiles(Tile target)
+	{
+		ResetAOE();
+
+		CheckAOETile(Vector3.forward);
+		CheckAOETile(-Vector3.forward);
+		CheckAOETile(Vector3.right);
+		CheckAOETile(-Vector3.right);
 	}
 
 	public void CheckWalkableTile(Vector3 direction, Tile target)
@@ -111,6 +142,19 @@ public class Tile : MonoBehaviour
 			var tile = item.GetComponent<Tile>();
 			if (tile != null)
 				AdjacencyList.Add(tile);
+		}
+	}
+	
+	public void CheckAOETile(Vector3 direction)
+	{
+		var halfExtents = new Vector3(0.25f, 0.25f, 0.25f);
+		var colliders = Physics.OverlapBox(transform.position + direction, halfExtents);
+
+		foreach (var item in colliders)
+		{
+			var tile = item.GetComponent<Tile>();
+			if (tile != null)
+				AOEAdjencyList.Add(tile);
 		}
 	}
 

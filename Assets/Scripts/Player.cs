@@ -31,6 +31,7 @@ public class Player : TacticsMove
 			{
 				IsAttacking = true;
 				FindAttackableTiles(currentAbility);
+				FindAOETile();
 				AttackTileUnderMouse();
 			}
 
@@ -110,7 +111,8 @@ public class Player : TacticsMove
 			{
 				var t = hit.collider.GetComponent<Tile>();
 
-				//if (t.Attackable)
+				if (t.Attackable)
+					FindAOETiles(currentAbility,t);
 					
 			}
 	}
@@ -139,7 +141,7 @@ public class Player : TacticsMove
 
 						if (tileUnder.Attackable)
 						{
-							AttackTile(tileUnder, currentAbility);
+							AttackTile(currentAbility);
 							currentAbility = null;
 						}
 						else

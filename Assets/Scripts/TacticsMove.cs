@@ -18,6 +18,7 @@ public class TacticsMove : MonoBehaviour
 
 	private readonly List<Tile> selectableTiles = new List<Tile>();
 	private readonly List<Tile> attackableTiles = new List<Tile>();
+	private readonly List<Tile> aoeTouchedTiles = new List<Tile>();
 
 	private readonly Stack<Tile> path = new Stack<Tile>();
 
@@ -121,6 +122,15 @@ public class TacticsMove : MonoBehaviour
 			t.FindNeighborsAttackableTiles(target);
 		}
 	}
+	
+	public void ComputeAOEAdjacencyLists(Tile target)
+	{
+		foreach (var tile in tiles)
+		{
+			var t = tile.GetComponent<Tile>();
+			t.FindNeighborsAOETiles(target);
+		}
+	}
 
 	public void FindSelectableTiles()
 	{
@@ -183,6 +193,50 @@ public class TacticsMove : MonoBehaviour
 					}
 		}
 	}
+	
+	public void FindAOETiles(Ability ability, Tile hoverTile)
+	{
+		ComputeAOEAdjacencyLists(null);
+		//GetCurrentTile();
+
+		var process = new Queue<Tile>();
+
+		process.Enqueue(hoverTile);
+		hoverTile.Visited = true;
+
+		while (process.Count > 0)
+		{
+			var t = process.Dequeue();
+
+			aoeTouchedTiles.Add(t);
+			t.AOETouched = true;
+
+			var currentAttackRange = ability.IsAffectedByPlayerRange
+				? ability.Range + CombatStats.AttackRange
+				: ability.Range;
+				
+			if (t.Distance < currentAttackRange)
+				foreach (var tile in t.AdjacencyList)
+					if (!tile.Visited)
+					{
+						tile.Parent = t;
+						tile.Visited = true;
+						tile.Distance = 1 + t.Distance;
+						process.Enqueue(tile);
+					}
+		}
+
+		foreach (var tile in tiles)
+		{
+			var tilee = tile.GetComponent<Tile>();
+
+			if (tilee.AOETouched)
+			{
+				tilee.Attackable = false;
+			}
+		}
+	}
+
 
 	public void MoveToTile(Tile tile)
 	{
@@ -240,15 +294,20 @@ public class TacticsMove : MonoBehaviour
 		nbOfTilesCrossed = 0;
 	}
 
-	protected void AttackTile(Tile tile, Ability ability)
+	protected void AttackTile(Ability ability)
 	{
 		CombatStats.RemoveActionPoints(ability.ApCost);
+
+		foreach (var tile in aoeTouchedTiles)
+		{
+			Debug.Log("Attacked tile: " + tile);
+
+			CheckObjectAttackedOnTile(tile, ability);
+		}
 		
 		ClearTilesList(attackableTiles);
 		IsAttacking = false;
-		Debug.Log("Attacked tile: " + tile);
-
-		CheckObjectAttackedOnTile(tile, ability);
+		
 	}
 
 	private void CheckObjectAttackedOnTile(Tile tile, Ability ability)
