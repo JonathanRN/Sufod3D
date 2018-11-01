@@ -40,13 +40,13 @@ public class Npc : TacticsMove
 		else
 			Move();
 
-		if (CombatStats.IsOutOfActionPoints)
+		if (CombatStats.IsOutOfAbilityPoints)
 		{
 			TurnManager.EndTurn();
 		}
 	}
 
-	private void CheckIfCanAttack()
+	private bool CheckIfCanAttack()
 	{
 		Ability abilityToCast = null;
 		
@@ -64,7 +64,12 @@ public class Npc : TacticsMove
 		}
 
 		if (abilityToCast != null)
+		{
 			AttackTile(GetTargetTile(target), abilityToCast);
+			return true;
+		}
+
+		return false;
 	}
 
 	private bool CheckIfPlayerOnTiles(List<Tile> tiles) //bug last time i checked, 61 times were going in the loop
@@ -88,7 +93,9 @@ public class Npc : TacticsMove
 	protected override void OnFinishedMoving()
 	{
 		base.OnFinishedMoving();
-		CheckIfCanAttack();
+
+		if (!CheckIfCanAttack())
+			TurnManager.EndTurn();
 	}
 
 	private void CalculatePath()

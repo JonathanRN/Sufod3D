@@ -242,7 +242,7 @@ public class TacticsMove : MonoBehaviour
 
 	protected void AttackTile(Tile tile, Ability ability)
 	{
-		CombatStats.RemoveActionPoints(ability.ApCost);
+		CombatStats.RemoveAbilityPoints(ability.ApCost);
 		
 		ClearTilesList(attackableTiles);
 		IsAttacking = false;
