@@ -1,27 +1,17 @@
 ﻿namespace WeSoLit.Perso1
 {
-	public class Slash : Ability {
-	
-		private int range = 2;
-		private int apCost = 2;
-		private bool isAffectedByPlayerRange = false;
-		private int damage = 5;
+	public class Slash : Ability
+	{
+		public override string Name { get; } = "Slash";
+		
+		public override int Range { get; } = 1;
 
-		public override int Range
-		{
-			get { return range; }
-		}
-		public override int Damage
-		{
-			get { return damage; }
-		}
-		public override int ApCost
-		{
-			get { return apCost; }
-		}
-		public override bool IsAffectedByPlayerRange
-		{
-			get { return isAffectedByPlayerRange; }
-		}
+		public override int Damage { get; } = 1;
+
+		public override int ApCost { get; } = 2;
+
+		public override int Priority { get; } = 2;
+		
+		public override bool IsAffectedByPlayerRange { get; } = false;
 	}
 }

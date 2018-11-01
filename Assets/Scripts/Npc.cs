@@ -1,12 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using WeSoLit;
+using WeSoLit.Perso1;
 
-public delegate Event OnNpcMouseOver();
 public class Npc : TacticsMove
 {
 	private GameObject target;
 	private NpcPathfinding npcPathfinding;
-
-	public event OnNpcMouseOver onNpcMouseOver;
 
 	protected override void Awake()
 	{
@@ -17,6 +17,8 @@ public class Npc : TacticsMove
 	private void Start()
 	{
 		Init();
+		Abilities.Add(new Fireball());
+		Abilities.Add(new Slash());
 	}
 
 	protected override void Update()
@@ -37,29 +39,61 @@ public class Npc : TacticsMove
 		}
 		else
 			Move();
+
+		if (CombatStats.IsOutOfActionPoints)
+		{
+			TurnManager.EndTurn();
+		}
+	}
+
+	private void CheckIfCanAttack()
+	{
+		Ability abilityToCast = null;
+		
+		foreach (var ability in Abilities)
+		{
+			FindAttackableTiles(ability);
+
+			if (CheckIfPlayerOnTiles(attackableTiles))
+			{
+				if (abilityToCast == null || abilityToCast.Priority < ability.Priority)
+				{
+					abilityToCast = ability;
+				}
+			}
+		}
+
+		if (abilityToCast != null)
+			AttackTile(GetTargetTile(target), abilityToCast);
+	}
+
+	private bool CheckIfPlayerOnTiles(List<Tile> tiles) //bug last time i checked, 61 times were going in the loop
+	{
+		foreach (var tile in tiles)
+		{
+			if (tile.Attackable)
+			{
+				RaycastHit hit;
+				if (tile.IsObjectOnTopOfTile(out hit))
+				{
+					if (hit.collider.CompareTag("Player"))
+						return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	protected override void OnFinishedMoving()
 	{
 		base.OnFinishedMoving();
-		//if (CombatStats.IsOutOfMovementPoints) todo endturn after enemy is done attacking or something else
-			TurnManager.EndTurn();
+		CheckIfCanAttack();
 	}
 
 	private void CalculatePath()
 	{
 		var targetTile = GetTargetTile(target);
 		npcPathfinding.FindPath(targetTile);
-	}
-
-	private void OnMouseOver()
-	{
-		NotifyOnMouseOver();
-	}
-
-	private void NotifyOnMouseOver()
-	{
-		if (onNpcMouseOver != null)
-			onNpcMouseOver();
 	}
 }

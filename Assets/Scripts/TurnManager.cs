@@ -2,12 +2,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+
+public delegate void OnQueueUpdatedEventHandler();
 public class TurnManager : MonoBehaviour
 {
 	private readonly List<GameObject> units = new List<GameObject>();
 	private Queue<GameObject> turnUnit;
-
+	
 	private bool firstTurn = true;
+
+	public Queue<GameObject> TurnUnit => turnUnit;
+	public event OnQueueUpdatedEventHandler OnQueueUpdated;
 
 	private void Update()
 	{
@@ -31,6 +36,7 @@ public class TurnManager : MonoBehaviour
 
 		turnUnit.Enqueue(unit);
 		
+		OnQueueUpdated?.Invoke();
 		StartTurn();
 	}
 	
@@ -53,5 +59,6 @@ public class TurnManager : MonoBehaviour
 	{
 		units.Sort((x, y) => y.GetComponentInChildren<CombatStats>().Speed.CompareTo(x.GetComponentInChildren<CombatStats>().Speed));
 		turnUnit = new Queue<GameObject>(units);
+		OnQueueUpdated?.Invoke();
 	}
 }

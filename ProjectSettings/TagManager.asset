@@ -7,6 +7,8 @@ TagManager:
   - Tile
   - NPC
   - Grid
+  - Canvas
+  - DamagePreview
   layers:
   - Default
   - TransparentFX

@@ -1,14 +1,26 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Boo.Lang;
 using UnityEngine;
+using WeSoLit;
+using WeSoLit.Perso1;
 
 public class Player : TacticsMove
 {
+	private DamagePreviewCreator damagePreviewCreator;
 	private Ability currentAbility;
-	
+
+	protected override void Awake()
+	{
+		base.Awake();
+		damagePreviewCreator = GameObject.FindWithTag("GameController").GetComponent<DamagePreviewCreator>();
+	}
+
 	private void Start()
 	{
 		Init();
+		Abilities.Add(new Fireball());
+		Abilities.Add(new Slash());
 	}
 
 	protected override void Update()
@@ -76,7 +88,6 @@ public class Player : TacticsMove
 		{
 			currentAbility = null;
 			TurnManager.EndTurn();
-			Debug.Log("End turn");
 		}
 	}
 
@@ -117,36 +128,51 @@ public class Player : TacticsMove
 
 	private void AttackTileUnderMouse()
 	{
-		if (!Input.GetMouseButtonUp(0))
-			return;
-
 		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 		RaycastHit hit;
 
-		if (Physics.Raycast(ray, out hit))
+		if (!Physics.Raycast(ray, out hit))
+			return;
+
+		if (hit.collider.CompareTag("NPC"))
 		{
-			if (hit.collider.CompareTag("NPC"))
+			RaycastHit npcHit;
+			// Check the tile under the unit to attack it
+			if (Physics.Raycast(hit.collider.transform.position, -Vector3.up, out npcHit))
 			{
-				RaycastHit npcHit;
-
-				// Check the tile under the unit to attack it
-				if (Physics.Raycast(hit.collider.transform.position, -Vector3.up, out npcHit))
+				if (npcHit.collider.CompareTag("Tile"))
 				{
-					if (npcHit.collider.CompareTag("Tile"))
-					{
-						var tileUnder = npcHit.collider.GetComponent<Tile>();
+					var tileUnder = npcHit.collider.GetComponent<Tile>();
 
-						if (tileUnder.Attackable)
+					if (tileUnder.Attackable)
+					{
+						CreateAndConfigureDamagePreview(hit.collider.gameObject);
+						if (Input.GetMouseButtonUp(0))
 						{
 							AttackTile(tileUnder, currentAbility);
 							currentAbility = null;
+							damagePreviewCreator.DestroyIfExists();
 						}
-						else
-							Debug.Log("Target too far away!");
 					}
 				}
 			}
+		}
+		else
+		{
+			damagePreviewCreator.DestroyIfExists();
+		}
+	}
+
+	private void CreateAndConfigureDamagePreview(GameObject target)
+	{
+		var instance = damagePreviewCreator.InstantiateDamagePreview();
+
+		if (instance != null)
+		{
+			var damagePreview = instance.GetComponent<DamagePreview>();
+			damagePreview.SetDamageText($"- {currentAbility.Damage}");
+			damagePreview.SetNameAndHealthText($"{target.name} ({target.GetComponentInChildren<Health>().HealthPoints})"); //todo Temporary values
 		}
 	}
 }

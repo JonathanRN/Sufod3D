@@ -1,4 +1,5 @@
 using UnityEngine;
+using WeSoLit;
 
 public class CombatStats : MonoBehaviour
 {

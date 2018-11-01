@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using WeSoLit;
 using WeSoLit.Perso1;
 
 public class TacticsMove : MonoBehaviour
@@ -17,7 +18,7 @@ public class TacticsMove : MonoBehaviour
 	protected Health health;
 
 	private readonly List<Tile> selectableTiles = new List<Tile>();
-	private readonly List<Tile> attackableTiles = new List<Tile>();
+	protected readonly List<Tile> attackableTiles = new List<Tile>();
 
 	private readonly Stack<Tile> path = new Stack<Tile>();
 
@@ -75,7 +76,6 @@ public class TacticsMove : MonoBehaviour
 		Abilities = new List<Ability>();
 		halfHeight = GetComponent<Collider>().bounds.extents.y;
 		TurnManager.AddUnit(gameObject);
-		InitPerso1Abilities();
 	}
 
 	protected virtual void Update()
@@ -246,7 +246,6 @@ public class TacticsMove : MonoBehaviour
 		
 		ClearTilesList(attackableTiles);
 		IsAttacking = false;
-		Debug.Log("Attacked tile: " + tile);
 
 		CheckObjectAttackedOnTile(tile, ability);
 	}
@@ -257,12 +256,9 @@ public class TacticsMove : MonoBehaviour
 
 		if (tile.IsObjectOnTopOfTile(out hit))
 		{
-			Debug.Log("You hit: " + hit.collider.gameObject);
+			Debug.Log($"{hit.collider.gameObject} got hit with {ability.Name}!");
 			hit.collider.GetComponentInChildren<Health>().Hit(ability.Damage);	
-			Debug.Log(hit.collider.GetComponentInChildren<Health>().HealthPoints);
 		}
-		else
-			Debug.Log("You hit nothing...");
 	}
 
 	private void ClearTilesList(List<Tile> list)
@@ -279,12 +275,6 @@ public class TacticsMove : MonoBehaviour
 		list.Clear();
 	}
 
-	private void InitPerso1Abilities()
-	{
-		Abilities.Add(new Fireball());
-		Abilities.Add(new Slash());
-	}
-
 	public void CalculateHeading(Vector3 target)
 	{
 		heading = target - transform.position;
@@ -298,7 +288,6 @@ public class TacticsMove : MonoBehaviour
 
 	public void BeginTurn()
 	{
-		//enabled = true;
 		IsItsTurn = true;
 		CombatStats.Reset();
 	}
@@ -306,6 +295,5 @@ public class TacticsMove : MonoBehaviour
 	public void EndTurn()
 	{
 		IsItsTurn = false;
-		//enabled = false;
 	}
 }
