@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.Configuration;
 using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 
@@ -24,9 +26,12 @@ public class Tile : MonoBehaviour
 	public float G { get; set; }
 	public float H { get; set; }
 
+	private Vector3 halfExtents;
+
 	private void Awake()
 	{
 		Walkable = true;
+		halfExtents = new Vector3(0.25f, 0.25f, 0.25f);
 	}
 
 	private void Update()
@@ -50,31 +55,19 @@ public class Tile : MonoBehaviour
 		GetComponent<Renderer>().material.color = color;
 	}
 
-	public void Reset()
+	public void Reset(bool isAOE)
 	{
-		AdjacencyList.Clear();
+		if(isAOE)
+			AOEAdjencyList.Clear();
+		else
+			AdjacencyList.Clear();
 
 		Current = false;
 		Target = false;
 		Selectable = false;
-		Attackable = false;
 		AOETouched = false;
-
-		Visited = false;
-		Parent = null;
-		Distance = 0;
-
-		F = G = H = 0;
-	}
-
-	public void ResetAOE()
-	{
-		AOEAdjencyList.Clear();
-		
-		Current = false;
-		Target = false;
-		Selectable = false;		
-		AOETouched = false;
+		if(!isAOE)
+			Attackable = false;
 
 		Visited = false;
 		Parent = null;
@@ -85,7 +78,7 @@ public class Tile : MonoBehaviour
 
 	public void FindNeighborsWalkableTiles(Tile target)
 	{
-		Reset();
+		Reset(false);
 
 		CheckWalkableTile(Vector3.forward, target);
 		CheckWalkableTile(-Vector3.forward, target);
@@ -93,29 +86,18 @@ public class Tile : MonoBehaviour
 		CheckWalkableTile(-Vector3.right, target);
 	}
 	
-	public void FindNeighborsAttackableTiles(Tile target)
+	public void FindNeighborsTiles(List<Tile> adjencyList,bool isAOE)
 	{
-		Reset();
+		Reset(isAOE);
 
-		CheckAttackableTile(Vector3.forward);
-		CheckAttackableTile(-Vector3.forward);
-		CheckAttackableTile(Vector3.right);
-		CheckAttackableTile(-Vector3.right);
-	}
-	
-	public void FindNeighborsAOETiles(Tile target)
-	{
-		ResetAOE();
-
-		CheckAOETile(Vector3.forward);
-		CheckAOETile(-Vector3.forward);
-		CheckAOETile(Vector3.right);
-		CheckAOETile(-Vector3.right);
+		CheckTile(Vector3.forward,adjencyList);
+		CheckTile(-Vector3.forward,adjencyList);
+		CheckTile(Vector3.right,adjencyList);
+		CheckTile(-Vector3.right,adjencyList);
 	}
 
 	public void CheckWalkableTile(Vector3 direction, Tile target)
 	{
-		var halfExtents = new Vector3(0.25f, 0.25f, 0.25f);
 		var colliders = Physics.OverlapBox(transform.position + direction, halfExtents);
 
 		foreach (var item in colliders)
@@ -132,31 +114,14 @@ public class Tile : MonoBehaviour
 		}
 	}
 
-	public void CheckAttackableTile(Vector3 direction)
+	private void CheckTile(Vector3 direction,List<Tile> adjencyList)
 	{
-		var halfExtents = new Vector3(0.25f, 0.25f, 0.25f);
 		var colliders = Physics.OverlapBox(transform.position + direction, halfExtents);
 
-		foreach (var item in colliders)
-		{
-			var tile = item.GetComponent<Tile>();
-			if (tile != null)
-				AdjacencyList.Add(tile);
-		}
+		adjencyList.AddRange(colliders.Select(item => item.GetComponent<Tile>()).Where(tile => tile != null));
 	}
 	
-	public void CheckAOETile(Vector3 direction)
-	{
-		var halfExtents = new Vector3(0.25f, 0.25f, 0.25f);
-		var colliders = Physics.OverlapBox(transform.position + direction, halfExtents);
-
-		foreach (var item in colliders)
-		{
-			var tile = item.GetComponent<Tile>();
-			if (tile != null)
-				AOEAdjencyList.Add(tile);
-		}
-	}
+	
 
 	public bool IsObjectOnTopOfTile(out RaycastHit hit)
 	{

@@ -120,7 +120,7 @@ namespace Characters
 			foreach (var tile in tiles)
 			{
 				var t = tile.GetComponent<Tile>();
-				t.FindNeighborsAttackableTiles(target);
+				t.FindNeighborsTiles(t.AdjacencyList,false);
 			}
 		}
 	
@@ -129,7 +129,7 @@ namespace Characters
 			foreach (var tile in tiles)
 			{
 				var t = tile.GetComponent<Tile>();
-				t.FindNeighborsAOETiles(target);
+				t.FindNeighborsTiles(t.AOEAdjencyList,true);
 			}
 		}
 
@@ -343,7 +343,7 @@ namespace Characters
 			}
 
 			foreach (var tile in list)
-				tile.Reset();
+				tile.Reset(false);
 
 			list.Clear();
 		}
