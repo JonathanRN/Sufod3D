@@ -25,10 +25,10 @@ public class RockMaker : MonoBehaviour
 
 			if (!Physics.Raycast(tile.transform.position, Vector3.up, out hit, 1))
 			{
-				var instance = Instantiate(rockPrefab,
-										   new Vector3(tile.transform.position.x, 0.75f, tile.transform.position.z),
-										   Quaternion.identity,
-										   transform);
+                Instantiate(rockPrefab,
+                           new Vector3(tile.transform.position.x, 0.75f, tile.transform.position.z),
+                           Quaternion.identity,
+                           transform);
 
 				i++;
 			}

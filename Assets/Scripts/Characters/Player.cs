@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Boo.Lang;
+using Characters;
 using UnityEngine;
 using WeSoLit;
 using WeSoLit.Perso1;

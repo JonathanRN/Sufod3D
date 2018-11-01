@@ -8,16 +8,19 @@
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Scripts" t="Include">
-          <e p="CombatStats.cs" t="Include" />
+          <e p="Characters" t="Include">
+            <e p="CombatStats.cs" t="Include" />
+            <e p="Enemy" t="Include">
+              <e p="Npc.cs" t="Include" />
+              <e p="NpcPathfinding.cs" t="Include" />
+            </e>
+            <e p="Health.cs" t="Include" />
+            <e p="Player.cs" t="Include" />
+            <e p="TacticsMove.cs" t="Include" />
+          </e>
           <e p="Grid.cs" t="Include" />
-          <e p="Health.cs" t="Include" />
-          <e p="Npc.cs" t="Include" />
-          <e p="NpcPathfinding.cs" t="Include" />
-          <e p="Player.cs" t="Include" />
-          <e p="Queue.cs" t="Include" />
           <e p="RockMaker.cs" t="Include" />
           <e p="TacticsCamera.cs" t="Include" />
-          <e p="TacticsMove.cs" t="Include" />
           <e p="Tile.cs" t="Include" />
           <e p="TurnManager.cs" t="Include" />
           <e p="TurnManagerTeam.cs" t="Include" />
@@ -26,6 +29,8 @@
             <e p="DamagePreview.cs" t="Include" />
             <e p="DamagePreviewCreator.cs" t="Include" />
             <e p="MenuScript.cs" t="Include" />
+            <e p="MovementPointsProgressBar.cs" t="Include" />
+            <e p="Queue.cs" t="Include" />
             <e p="RadialProgressBar.cs" t="Include" />
             <e p="TurnQueue.cs" t="Include" />
           </e>
