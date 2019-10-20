@@ -4,10 +4,10 @@ namespace Ui
 {
 	public class AbilityPointsProgressBar : RadialProgressBar
 	{
-		protected override void OnAbilityPointsChange()
+		private void Update()
 		{
-			progressBar.fillAmount = (float)playerCombatStats.AbilityPoints / playerCombatStats.MaxAbilityPoints;
-			amountText.text = playerCombatStats.AbilityPoints.ToString();
+			progressBar.fillAmount = (float)playerStats.Ap / playerStats.MaxAp;
+			amountText.text = playerStats.Ap.ToString();
 		}
 	}
 }

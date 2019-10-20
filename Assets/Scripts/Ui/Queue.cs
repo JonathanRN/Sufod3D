@@ -4,31 +4,27 @@ using UnityEngine.UI;
 
 public class Queue : MonoBehaviour
 {
-	[SerializeField] private GameObject itemPrefab;
+	[SerializeField]
+	private GameObject itemPrefab;
 
-	private TurnManager turnManager;
-	private Queue<GameObject> queue;
-
-	private void Awake()
-	{
-		turnManager = GameObject.FindWithTag("GameController").GetComponent<TurnManager>();
-	}
+	private Queue<Unit> queue;
 
 	private void OnEnable()
 	{
-		turnManager.OnQueueUpdated += OnQueueUpdate;
+		TurnManager.OnQueueUpdated += OnQueueUpdate;
 	}
 
 	private void OnDisable()
 	{
-		turnManager.OnQueueUpdated -= OnQueueUpdate;
+		TurnManager.OnQueueUpdated -= OnQueueUpdate;
 	}
 
 	private void OnQueueUpdate()
 	{
+		// TODO dont destroy/instantiate
 		DestroyAllChildren();
 		
-		queue = turnManager.TurnUnit;
+		queue = TurnManager.Instance.TurnUnits;
 		
 		foreach (var obj in queue)
 		{
@@ -44,4 +40,4 @@ public class Queue : MonoBehaviour
 			Destroy(transform.GetChild(i).gameObject);
 		}
 	}
-}
+} 

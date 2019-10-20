@@ -19,10 +19,25 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4127043409976436}
-  - component: {fileID: 114683889603345854}
-  - component: {fileID: 114997796814530054}
   m_Layer: 0
   m_Name: Control
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1628878107099658
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4055280584275120}
+  - component: {fileID: 114586255160537788}
+  - component: {fileID: 114315735802525838}
+  m_Layer: 0
+  m_Name: Combat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,6 +62,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &4055280584275120
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1628878107099658}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4912544890512356}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4127043409976436
 Transform:
   m_ObjectHideFlags: 1
@@ -71,6 +99,7 @@ Transform:
   m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_Children:
   - {fileID: 4127043409976436}
+  - {fileID: 4055280584275120}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -127,35 +156,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aad065545539f1468f84cbd030120dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMoving: 0
-  isAttacking: 0
-  moveSpeed: 3
---- !u!114 &114683889603345854
+  moveSpeed: 5
+  unitStats: {fileID: 11400000, guid: aff012cab85804346827059f46188b18, type: 2}
+  IsItsTurn: 0
+--- !u!114 &114315735802525838
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1219143030786660}
+  m_GameObject: {fileID: 1628878107099658}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f9c4461e6ef484eb7227d67e1604217, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f54690b3be5e1a4fbeb95f11e8b18e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementPoints: 5
-  actionPoints: 6
-  attackRange: 2
---- !u!114 &114997796814530054
+--- !u!114 &114586255160537788
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1219143030786660}
+  m_GameObject: {fileID: 1628878107099658}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b22326dde2547d4af09a8fda6106a3c, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d6693f827c393742b8834581e4f44d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealthPoints: 10
+  player: {fileID: 114132851168086058}
 --- !u!136 &136845249192597566
 CapsuleCollider:
   m_ObjectHideFlags: 1

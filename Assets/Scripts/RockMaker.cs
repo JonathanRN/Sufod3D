@@ -5,11 +5,11 @@ public class RockMaker : MonoBehaviour
 	[SerializeField] private GameObject rockPrefab;
 	[SerializeField] private int amount;
 
-	private GameObject[] tiles;
+	private Tile[] tiles;
 
 	private void Start()
 	{
-		tiles = GameObject.FindWithTag("Grid").GetComponent<Grid>().Tiles;
+		tiles = GridManager.Instance.Tiles.ToArray();
 		
 		RandomlyGenerateRocks();
 	}
@@ -23,6 +23,7 @@ public class RockMaker : MonoBehaviour
 			
 			RaycastHit hit;
 
+			// If there's nothing 1 meter up from the tile... todo change this
 			if (!Physics.Raycast(tile.transform.position, Vector3.up, out hit, 1))
 			{
                 Instantiate(rockPrefab,
@@ -30,6 +31,7 @@ public class RockMaker : MonoBehaviour
                            Quaternion.identity,
                            transform);
 
+				tile.SetTileType(TileType.Invalid);
 				i++;
 			}
 		}
